@@ -42,16 +42,7 @@ async function _predict(
   inputSize,
 ) {
   let outputs = tf.tidy(() => {
-    const canvas = document.createElement('canvas');
-    canvas.width = inputSize;
-    canvas.height = inputSize;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(image, 0, 0, inputSize, inputSize);
-
-    let imageTensor = tf.browser.fromPixels(canvas, 3);
-    imageTensor = imageTensor.expandDims(0).toFloat().div(tf.scalar(255));
-
-    const outputs = model.predict(imageTensor);
+    const outputs = model.predict(image);
     return outputs;
   });
 
@@ -61,9 +52,7 @@ async function _predict(
     anchors,
     numClasses,
     classNames,
-    image.constructor.name === 'HTMLVideoElement' ?
-      [image.videoHeight, image.videoWidth] :
-      [image.height, image.width],
+    image,
     maxBoxes,
     scoreThreshold,
     iouThreshold
