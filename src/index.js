@@ -43,6 +43,7 @@ async function _predict(
 ) {
   let outputs = tf.tidy(() => {
     const outputs = model.predict(image);
+    imageShape=[image.shape[1], image.shape[2]];
     return outputs;
   });
 
@@ -52,7 +53,7 @@ async function _predict(
     anchors,
     numClasses,
     classNames,
-    image,
+    imageShape,
     maxBoxes,
     scoreThreshold,
     iouThreshold
